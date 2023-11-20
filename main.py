@@ -15,6 +15,11 @@ pipe = AutoPipelineForText2Image.from_pretrained(model_id, torch_dtype=torch.flo
 pipe.scheduler = LCMScheduler.from_config(pipe.scheduler.config)
 pipe.to("cuda")
 
+pipe.load_lora_weights(adapter_id)
+pipe.fuse_lora()
+
+image = pipe(prompt=prompt, num_inference_steps=4, guidance_scale=0).images[0]
+
 app = Flask(__name__)
 run_with_ngrok(app)
 
