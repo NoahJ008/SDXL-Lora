@@ -18,7 +18,6 @@ pipe.to("cuda")
 pipe.load_lora_weights(adapter_id)
 pipe.fuse_lora()
 
-image = pipe(prompt=prompt, num_inference_steps=4, guidance_scale=0).images[0]
 
 app = Flask(__name__)
 run_with_ngrok(app)
@@ -31,7 +30,7 @@ def initial():
 def generate_image():
     prompt = request.form["prompt-input"]
 
-    image = pipe(prompt).images[0]
+    image = pipe(prompt, num_inference_steps=4, guidance_scale=0).images[0]
 
     buffered = BytesIO()
     image.save(buffered, format="PNG")
